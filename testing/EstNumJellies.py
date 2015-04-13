@@ -45,9 +45,11 @@ class NumJellyEstimator:
     def set_world_pop(self, people):
 
         # NE24: Add a test for type here
- 
+        assert type(people) is int, "Error: population must be of type int"
         # NE24: Add a test for value here
-
+        if (people <= 0.0):
+            print "\nError: Population cannot be negative\n"
+            sys.exit()
         # Store the fraction.
         self.worldPop = people
 
@@ -56,9 +58,12 @@ class NumJellyEstimator:
     def set_frac_ppl_loving_pink(self, frac):
 
         # NE24: Add a test for type here
-
+        assert type(frac) is float, "Error: fraction must be of type float"
         # NE24: Add a test for value here
-
+        if ((frac <= 0.0) or (frac >= 1.0)):
+            print "\nError: Fraction of people who love pink must be between"\
+                  +" 0.0 and 1.0.\n"
+            sys.exit()
         # Store the fraction.
         self.fracPplLovingPink = frac
 
@@ -84,9 +89,12 @@ class NumJellyEstimator:
 
     ## Estimate the number of jelly beans in the world using the new pink data.
     def compute_Njelly_pink_est(self):
-
-        n = self.fracLand4Sugar * self.worldPop * self.scalingConst / \
-            (1.0 - self.fracPplLovingPink)
+        try:
+            n = self.fracLand4Sugar * self.worldPop * self.scalingConst / \
+                (1.0 - self.fracPplLovingPink)
+        except ZeroDivisionError:
+            print "Error:  divided by zero because the fraction of people who love pink is 1"
+            sys.exit()
         # If this value is zero, it means that some value didn't get set.
         if (n == 0.0):
             print "\nError: fraction of land for sugar, world population, and"\
